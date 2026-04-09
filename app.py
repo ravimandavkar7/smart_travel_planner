@@ -1,0 +1,296 @@
+import streamlit as st
+import sqlite3
+import base64
+
+def set_bg(image_file):
+    with open(image_file, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode()
+
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpg;base64,{encoded}");
+        background-size: cover;
+        background-position: center;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+
+conn = sqlite3.connect("tripplanner.db")
+
+cursor = conn.cursor()
+
+st.title("Smart Travel Planner ✈️")
+
+# Dropdown from DB
+cursor.execute("SELECT Destination FROM Destination")
+destinations = [row[0] for row in cursor.fetchall()]
+
+selected = st.selectbox("Select Destination", destinations)
+
+cursor.execute("""
+SELECT DestinationId, Min_day, avg_budget,image_path
+FROM Destination
+WHERE Destination=?
+""", (selected,))
+
+data = cursor.fetchone()
+
+destination_id = data[0]
+min_day = data[1]
+avg_budget = data[2]
+image_path=data[3]
+
+
+# ✅ APPLY BACKGROUND HERE
+set_bg(image_path)
+
+# 1️⃣ Dark Overlay (handles any image)
+st.markdown("""
+<style>
+.stApp::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 0;
+}
+
+.stApp > * {
+    position: relative;
+    z-index: 1;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+# 2️⃣ Main Content Container (MOST IMPORTANT)
+st.markdown("""
+<style>
+.block-container {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border-radius: 15px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+# 3️⃣ Force Text Color
+st.markdown("""
+<style>
+h1, h2, h3, h4, h5, h6, p, div, span {
+    color: white !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+
+/* Selectbox background */
+div[data-baseweb="select"] > div {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    color: white !important;
+    border-radius: 10px;
+}
+
+/* Selected value text */
+div[data-baseweb="select"] span {
+    color: white !important;
+}
+
+/* Dropdown menu */
+ul {
+    background-color: black !important;
+    color: white !important;
+}
+
+/* Dropdown items */
+li {
+    color: white !important;
+}
+
+/* Hover effect */
+li:hover {
+    background-color: rgba(255,255,255,0.2) !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+
+/* Main button */
+.stButton > button {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: 1px solid white;
+    font-weight: bold;
+}
+
+/* Hover effect */
+.stButton > button:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+
+/* Active (click) effect */
+.stButton > button:active {
+    background-color: #444;
+    color: white;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+
+st.markdown("""
+<style>
+
+/* Fix overall page spacing */
+.block-container {
+    padding-top: 2rem !important;
+    padding-bottom: 1rem !important;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Title styling */
+h1 {
+    text-align: center;
+    margin-top: 0px !important;
+    margin-bottom: 25px !important;
+}
+
+/* Reduce gap between elements */
+div[data-testid="stVerticalBlock"] {
+    gap: 0.8rem !important;
+}
+
+/* Reduce spacing between inputs */
+div[data-testid="stSelectbox"],
+div[data-testid="stNumberInput"] {
+    margin-bottom: 0px !important;
+}
+
+/* Button spacing */
+.stButton {
+    margin-top: 15px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+
+
+
+min_day = int(data[1])
+days = st.selectbox(
+    "Select Number of Days",
+    [min_day, min_day + 1, min_day + 2]
+)
+
+avg_budget=int(data[2])
+budget = st.selectbox(
+    "Select Budget ₹",
+    [avg_budget, avg_budget + 2000, avg_budget + 5000]
+)
+
+cursor.execute("""
+SELECT day_number, Description
+FROM Itinerary
+WHERE DestinationId = ?
+AND day_number <= ?
+ORDER BY day_number
+""",  (destination_id, days))
+
+result = cursor.fetchall()
+
+if st.button("Generate Plan"):
+
+    cursor.execute("""
+    select day_number,title,it.Description 
+    from Itinerary it join Destination ds on(it.DestinationId=ds.DestinationId)
+    WHERE Destination=?
+    ORDER BY day_number
+    """, (selected,))
+
+    result = cursor.fetchall()
+
+    st.subheader("Your Itinerary")
+
+    for i in range(days):
+        if i < len(result):
+            st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
+        else:
+            st.write(f"Day {i+1}: Free exploration")
+
+    st.subheader("Budget Breakdown")
+    st.write("Stay:", budget * 0.4)
+    st.write("Travel:", budget * 0.3)
+    st.write("Food:", budget * 0.2)
+    st.write("Misc:", budget * 0.1)
+
+
+    st.subheader("📍 Top Places to Visit")
+
+    cursor.execute("""
+    SELECT place_name,type,rating,description
+    FROM Places
+    WHERE DestinationId = ?
+    """, (destination_id,))
+
+    places = cursor.fetchall()
+
+    for place in places:
+        st.write(f"{place[0]} ({place[1]}) Place Rating ⭐{place[2]}: {place[3]}")
+
+
+
+    st.subheader("🏨 Recommended Hotels")
+
+    cursor.execute("""
+    SELECT hotel_name,price_per_night,rating,location
+    FROM Hotels
+    WHERE DestinationId = ?
+    """, (destination_id,))
+
+    hotels = cursor.fetchall()
+    nights = days - 1
+    
+    if nights <= 0:
+        nights = 1
+    
+    per_night_budget = (budget * 0.4) / nights
+   
+    st.write(f"💡 Hotels under ₹{per_night_budget:.0f} per night")
+    for hotel in hotels:
+        price = float(hotel[1])
+        
+        if price <= per_night_budget:
+            st.markdown(f"**🏨 {hotel[0]}**")
+            st.write(f"Price: ₹{hotel[1]} per night | Hotel Review Rating⭐: {hotel[2]} | location: {hotel[3]}")
+        else:
+            st.write("Curruntly No Hotel is available in your Budget Kindly contact for Budget Hotel.")
+
+
+    st.subheader("🚗 Travel Options")
+
+    cursor.execute("""
+    SELECT mode, source_city, approx_cost, duration
+    FROM Transport
+    WHERE DestinationId = ?
+    """, (destination_id,))
+
+    transport = cursor.fetchall()
+
+    for t in transport:
+        st.write(f"{t[0]} from {t[1]} - ₹{t[2]} ({t[3]})")
