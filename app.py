@@ -2,6 +2,23 @@ import streamlit as st
 import sqlite3
 import base64
 import os
+from openai import OpenAI
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+def generate_itinerary(destination, days, budget):
+    prompt = f"""
+    Create a {days}-day travel itinerary for {destination} in India.
+    Budget: {budget} INR.
+    Include day-wise plan, places to visit, and tips.
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response.choices[0].message.content
 
 def set_bg(image_file):
     if not os.path.exists(image_file):
@@ -207,6 +224,12 @@ budget = st.selectbox(
     "Select Budget ₹",
     [avg_budget, avg_budget + 2000, avg_budget + 5000]
 )
+
+if st.button("Generate AI Itinerary 🤖"):
+    ai_plan = generate_itinerary(selected, days, budget)
+    st.subheader("🤖 AI Generated Travel Plan")
+    st.write(ai_plan)
+
 
 cursor.execute("""
 SELECT day_number, Description
