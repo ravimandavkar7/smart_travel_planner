@@ -3,6 +3,9 @@ import sqlite3
 import base64
 
 def set_bg(image_file):
+    if not os.path.exists(image_file):
+        st.warning(f"Image not found: {image_file}")
+        return
     with open(image_file, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
 
@@ -42,6 +45,7 @@ min_day = data[1]
 avg_budget = data[2]
 image_path=data[3]
 
+st.write(image_path)
 
 # ✅ APPLY BACKGROUND HERE
 set_bg(image_path)
