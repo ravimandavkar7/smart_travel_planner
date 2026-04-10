@@ -45,7 +45,6 @@ min_day = data[1]
 avg_budget = data[2]
 image_path=data[3]
 
-st.write(image_path)
 
 # ✅ APPLY BACKGROUND HERE
 set_bg(image_path)
