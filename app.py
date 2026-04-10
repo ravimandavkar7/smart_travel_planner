@@ -7,18 +7,21 @@ from openai import OpenAI
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def generate_itinerary(destination, days, budget):
-    prompt = f"""
-    Create a {days}-day travel itinerary for {destination} in India.
-    Budget: {budget} INR.
-    Include day-wise plan, places to visit, and tips.
-    """
+    try:
+        prompt = f"""
+        Create a {days}-day travel itinerary for {destination} in India.
+        Budget: {budget} INR.
+        Include day-wise plan, places to visit, and tips.
+        """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}]
+        )
 
-    return response.choices[0].message.content
+        return response.choices[0].message.content
+    except Exception as e:
+        return "⚠️ AI service not available. Please try again later."
 
 def set_bg(image_file):
     if not os.path.exists(image_file):
