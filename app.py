@@ -1,6 +1,7 @@
 import streamlit as st
 import sqlite3
 import base64
+import os
 
 def set_bg(image_file):
     if not os.path.exists(image_file):
