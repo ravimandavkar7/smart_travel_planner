@@ -3,6 +3,7 @@ import sqlite3
 import base64
 import os
 from openai import OpenAI
+import uuid
 
 
 if "user_saved" not in st.session_state:
