@@ -6,7 +6,7 @@ from openai import OpenAI
 
 
 if "user_saved" not in st.session_state:
-    st.session_state.user_saved = False
+    st.session_state.user_id = str(uuid.uuid4())
 
 
 def user_form():
@@ -81,6 +81,8 @@ cursor.execute("SELECT Destination FROM Destination")
 destinations = [row[0] for row in cursor.fetchall()]
 
 selected = st.selectbox("Select Destination", destinations)
+
+log_user(st.session_state.user_id, selected, days, budget, 0)
 
 cursor.execute("""
 SELECT DestinationId, Min_day, avg_budget,image_path
