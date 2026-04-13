@@ -25,24 +25,6 @@ if st.sidebar.button("Save User"):
     st.sidebar.success("User saved!")
 
 
-def log_user(user_id, destination, days, budget, used_ai):
-    conn = sqlite3.connect("tripplanner.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-    INSERT INTO UserLogs (UserId, destination, days, budget, used_ai)
-    VALUES (?, ?, ?, ?, ?)
-    """, (user_id, destination, days, budget, used_ai))
-
-    conn.commit()
-    conn.close()
-
-
-user_id = st.session_state.get("user_id", None)
-
-if user_id:
-    log_user(user_id, selected, days, budget, 1)
-
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
