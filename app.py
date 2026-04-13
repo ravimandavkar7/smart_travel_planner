@@ -338,6 +338,6 @@ if st.button("Generate Plan"):
         ✔ Optimize your full trip cost\n  
 
         📩 Contact for personalized plan:
-        📧 yourmail@gmail.com  
-        📱 WhatsApp: +91-XXXXXXXXXX
+        📧 ravimandavkar7@gmail.com  
+        📱 WhatsApp: +91-9167159485
         """)
