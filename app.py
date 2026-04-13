@@ -94,8 +94,6 @@ destinations = [row[0] for row in cursor.fetchall()]
 
 selected = st.selectbox("Select Destination", destinations)
 
-log_user(st.session_state.user_id, selected, days, budget, 0)
-
 cursor.execute("""
 SELECT DestinationId, Min_day, avg_budget,image_path
 FROM Destination
@@ -108,6 +106,9 @@ destination_id = data[0]
 min_day = data[1]
 avg_budget = data[2]
 image_path=data[3]
+
+
+log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
 
 
 # ✅ APPLY BACKGROUND HERE
