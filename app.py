@@ -29,7 +29,7 @@ def log_user(user_id, destination, days, budget, used_ai):
     conn = sqlite3.connect("tripplanner.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
+cursor.execute("""
     INSERT INTO UserLogs (UserId, destination, days, budget, used_ai)
     VALUES (?, ?, ?, ?, ?)
     """, (user_id, destination, days, budget, used_ai))
