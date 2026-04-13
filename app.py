@@ -262,9 +262,10 @@ if st.button("Generate Plan"):
             st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
         else:
             st.write(f"Day {i+1}: Free exploration")
-
+    
+    stay_budget=budget * 0.4
     st.subheader("Budget Breakdown")
-    st.write("Stay:", budget * 0.4)
+    st.write("Stay:", stay_budget)
     st.write("Travel:", budget * 0.3)
     st.write("Food:", budget * 0.2)
     st.write("Misc:", budget * 0.1)
