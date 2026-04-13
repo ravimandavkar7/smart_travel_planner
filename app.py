@@ -4,25 +4,32 @@ import base64
 import os
 from openai import OpenAI
 
-st.sidebar.header("👤 User Info")
-name = st.sidebar.text_input("Enter your name")
-email = st.sidebar.text_input("Enter your email")
 
-if st.sidebar.button("Save User"):
-    conn = sqlite3.connect("tripplanner.db")
-    cursor = conn.cursor()
+if "user_saved" not in st.session_state:
+    st.session_state.user_saved = False
 
-    cursor.execute("""
-    INSERT INTO Users (name, email)
-    VALUES (?, ?)
-    """, (name, email))
 
-    conn.commit()
+def user_form():
+    st.subheader("👤 Enter your details")
 
-    user_id = cursor.lastrowid
-    st.session_state["user_id"] = user_id
+    name = st.text_input("Name")
+    email = st.text_input("Email")
 
-    st.sidebar.success("User saved!")
+    if st.button("Submit"):
+        conn = sqlite3.connect("tripplanner.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        INSERT INTO Users (name, email)
+        VALUES (?, ?)
+        """, (name, email))
+
+        conn.commit()
+
+        st.session_state.user_id = cursor.lastrowid
+        st.session_state.user_saved = True
+
+        st.success("✅ Details saved!")
 
 
 
@@ -251,9 +258,12 @@ budget = st.selectbox(
 )
 
 if st.button("Generate AI Itinerary 🤖"):
-    ai_plan = generate_itinerary(selected, days, budget)
-    st.subheader("🤖 AI Generated Travel Plan")
-    st.write(ai_plan)
+    if not st.session_state.user_saved:
+        user_form()
+    else:
+        ai_plan = generate_itinerary(selected, days, budget)
+        st.subheader("🤖 AI Generated Travel Plan")
+        st.write(ai_plan)
 
 
 cursor.execute("""
