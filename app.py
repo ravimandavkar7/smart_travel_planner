@@ -5,6 +5,17 @@ import os
 from openai import OpenAI
 import uuid
 
+def log_user(user_id, destination, days, budget, used_ai):
+    conn = sqlite3.connect("tripplanner.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO UserLogs (user_id, destination, days, budget, used_ai)
+    VALUES (?, ?, ?, ?, ?)
+    """, (user_id, destination, days, budget, used_ai))
+
+    conn.commit()
+    conn.close()
 
 if "user_saved" not in st.session_state:
     st.session_state.user_id = str(uuid.uuid4())
