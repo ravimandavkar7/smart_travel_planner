@@ -4,6 +4,46 @@ import base64
 import os
 from openai import OpenAI
 
+st.sidebar.header("👤 User Info")
+name = st.sidebar.text_input("Enter your name")
+email = st.sidebar.text_input("Enter your email")
+
+if st.sidebar.button("Save User"):
+    conn = sqlite3.connect("tripplanner.db")
+    cursor = conn.cursor()
+
+     cursor.execute("""
+    INSERT INTO Users (name, email)
+    VALUES (?, ?)
+    """, (name, email))
+
+    conn.commit()
+
+    user_id = cursor.lastrowid
+    st.session_state["user_id"] = user_id
+
+    st.sidebar.success("User saved!")
+
+
+def log_user(user_id, destination, days, budget, used_ai):
+    conn = sqlite3.connect("tripplanner.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO UserLogs (UserId, destination, days, budget, used_ai)
+    VALUES (?, ?, ?, ?, ?)
+    """, (user_id, destination, days, budget, used_ai))
+
+    conn.commit()
+    conn.close()
+
+
+user_id = st.session_state.get("user_id", None)
+
+if user_id:
+    log_user(user_id, selected, days, budget, 1)
+
+
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def generate_itinerary(destination, days, budget):
