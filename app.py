@@ -7,10 +7,11 @@ import uuid
 from supabase import create_client
 
 supabase = create_client(
-    st.secrets["https://supabase.com/dashboard/project/fzlqvgseogyzhcbsgtnr/settings/general"],
-    st.secrets["fzlqvgseogyzhcbsgtnr"]
+    st.secrets["SUPABASE_URL"],
+    st.secrets["SUPABASE_KEY"]
 )
 
+st.write("Secrets:", st.secrets)
 
 def log_user(user_id, destination, days, budget, used_ai):
     supabase.table("user_logs").insert({
