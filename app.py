@@ -313,29 +313,29 @@ if st.session_state.show_ai_confirm:
         if st.button("❌ No"):
             st.session_state.show_ai_confirm = False
 
-if st.session_state.use_ai:
+#if st.session_state.use_ai:
 
-    with st.spinner("Generating AI Itinerary..."):
-        try:
-            ai_result = generate_itinerary(selected, days, budget)
+#    with st.spinner("Generating AI Itinerary..."):
+#        try:
+#            ai_result = generate_itinerary(selected, days, budget)
 
-            st.subheader("🤖 AI Generated Itinerary")
-            st.write(ai_result)
+#            st.subheader("🤖 AI Generated Itinerary")
+#            st.write(ai_result)
 
-            # ✅ Log AI usage
-            log_user_supabase(
-                st.session_state.user_id,
-                selected,
-                days,
-                budget,
-                1
-            )
+#            # ✅ Log AI usage
+#            log_user_supabase(
+#                st.session_state.user_id,
+#                selected,
+#                days,
+#                budget,
+#                1
+#            )
 
-        except Exception as e:
-            st.error(f"Error: {e}")
+#        except Exception as e:
+#            st.error(f"Error: {e}")
 
     # ✅ RESET STATE (VERY IMPORTANT)
-    st.session_state.use_ai = False
+#    st.session_state.use_ai = False
 
 st.write("DEBUG:", st.session_state)
 
