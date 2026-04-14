@@ -6,6 +6,12 @@ from openai import OpenAI
 import uuid
 from supabase import create_client
 
+if "show_ai_confirm" not in st.session_state:
+    st.session_state.show_ai_confirm = False
+
+if "use_ai" not in st.session_state:
+    st.session_state.use_ai = False
+
 if "SUPABASE_URL" in st.secrets and "SUPABASE_KEY" in st.secrets:
     supabase = create_client(
         st.secrets["SUPABASE_URL"],
@@ -292,40 +298,44 @@ result = cursor.fetchall()
 if st.button("🤖 Generate AI Itinerary"):
     st.session_state.show_ai_confirm = True
 
-if st.session_state.get("show_ai_confirm", False):
+if st.session_state.show_ai_confirm:
+
     st.warning("⚠️ This is a chargeable feature. Do you want to continue?")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         if st.button("✅ Yes, Continue"):
             st.session_state.use_ai = True
-    
+            st.session_state.show_ai_confirm = False
+
     with col2:
         if st.button("❌ No"):
             st.session_state.show_ai_confirm = False
 
-if st.session_state.get("use_ai", False):
+if st.session_state.use_ai:
 
     with st.spinner("Generating AI Itinerary..."):
-        ai_result = generate_itinerary(selected, days, budget)
+        try:
+            ai_result = generate_itinerary(selected, days, budget)
 
-        st.subheader("🤖 AI Generated Itinerary")
-        st.write(ai_result)
+            st.subheader("🤖 AI Generated Itinerary")
+            st.write(ai_result)
 
-        # ✅ LOG IN SUPABASE (used_ai = 1)
-        log_user_supabase(
-            st.session_state.user_id,
-            selected,
-            days,
-            budget,
-            1
-        )
+            # ✅ Log AI usage
+            log_user_supabase(
+                st.session_state.user_id,
+                selected,
+                days,
+                budget,
+                1
+            )
 
-    # Reset state
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+    # ✅ RESET STATE (VERY IMPORTANT)
     st.session_state.use_ai = False
-    st.session_state.show_ai_confirm = False
-
 
 if st.button("Generate Plan"):
 
