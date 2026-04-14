@@ -337,6 +337,8 @@ if st.session_state.use_ai:
     # ✅ RESET STATE (VERY IMPORTANT)
     st.session_state.use_ai = False
 
+st.write("DEBUG:", st.session_state)
+
 if st.button("Generate Plan"):
 
     log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
