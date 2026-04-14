@@ -299,6 +299,8 @@ result = cursor.fetchall()
 
 if st.button("Generate Plan"):
 
+    log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
+
     cursor.execute("""
     select day_number,title,it.Description 
     from Itinerary it join Destination ds on(it.DestinationId=ds.DestinationId)
@@ -395,4 +397,3 @@ if st.button("Generate Plan"):
         📱 WhatsApp: +91-9167159485
         """)
 
-log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
