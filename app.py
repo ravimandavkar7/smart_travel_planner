@@ -6,8 +6,6 @@ from openai import OpenAI
 import uuid
 from supabase import create_client
 
-st.write("Loaded Secrets:", dict(st.secrets))
-
 if "SUPABASE_URL" in st.secrets and "SUPABASE_KEY" in st.secrets:
     supabase = create_client(
         st.secrets["SUPABASE_URL"],
@@ -16,7 +14,6 @@ if "SUPABASE_URL" in st.secrets and "SUPABASE_KEY" in st.secrets:
 else:
     st.error("❌ Supabase secrets not found. Please check Streamlit Secrets.")
 
-st.write("Secrets:", st.secrets)
 
 def log_user(user_id, destination, days, budget, used_ai):
     supabase.table("userlogs").insert({
