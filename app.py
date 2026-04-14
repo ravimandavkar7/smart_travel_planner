@@ -278,14 +278,6 @@ budget = st.selectbox(
     [avg_budget, avg_budget + 2000, avg_budget + 5000]
 )
 
-if st.button("Generate AI Itinerary 🤖"):
-    if not st.session_state.user_saved:
-        user_form()
-    else:
-        ai_plan = generate_itinerary(selected, days, budget)
-        st.subheader("🤖 AI Generated Travel Plan")
-        st.write(ai_plan)
-
 
 cursor.execute("""
 SELECT day_number, Description
@@ -296,6 +288,44 @@ ORDER BY day_number
 """,  (destination_id, days))
 
 result = cursor.fetchall()
+
+if st.button("🤖 Generate AI Itinerary"):
+    st.session_state.show_ai_confirm = True
+
+if st.session_state.get("show_ai_confirm", False):
+    st.warning("⚠️ This is a chargeable feature. Do you want to continue?")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("✅ Yes, Continue"):
+            st.session_state.use_ai = True
+    
+    with col2:
+        if st.button("❌ No"):
+            st.session_state.show_ai_confirm = False
+
+if st.session_state.get("use_ai", False):
+
+    with st.spinner("Generating AI Itinerary..."):
+        ai_result = generate_itinerary(selected, days, budget)
+
+        st.subheader("🤖 AI Generated Itinerary")
+        st.write(ai_result)
+
+        # ✅ LOG IN SUPABASE (used_ai = 1)
+        log_user_supabase(
+            st.session_state.user_id,
+            selected,
+            days,
+            budget,
+            1
+        )
+
+    # Reset state
+    st.session_state.use_ai = False
+    st.session_state.show_ai_confirm = False
+
 
 if st.button("Generate Plan"):
 
