@@ -115,7 +115,6 @@ avg_budget = data[2]
 image_path=data[3]
 
 
-log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
 
 
 # ✅ APPLY BACKGROUND HERE
@@ -395,3 +394,5 @@ if st.button("Generate Plan"):
         📧 ravimandavkar7@gmail.com  
         📱 WhatsApp: +91-9167159485
         """)
+
+log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
