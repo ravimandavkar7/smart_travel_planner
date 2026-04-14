@@ -19,7 +19,7 @@ else:
 st.write("Secrets:", st.secrets)
 
 def log_user(user_id, destination, days, budget, used_ai):
-    supabase.table("user_logs").insert({
+    supabase.table("UserLogs").insert({
         "user_id": user_id,
         "destination": destination,
         "days": days,
