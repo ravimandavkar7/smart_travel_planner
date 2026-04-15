@@ -40,32 +40,8 @@ def log_user(user_id, destination, days, budget, used_ai):
         "used_ai": used_ai
     }).execute()
 
-if "user_saved" not in st.session_state:
+if "user_id" not in st.session_state:
     st.session_state.user_id = str(uuid.uuid4())
-
-
-def user_form():
-    st.subheader("👤 Enter your details")
-
-    name = st.text_input("Name")
-    email = st.text_input("Email")
-
-    if st.button("Submit"):
-        conn = sqlite3.connect("tripplanner.db")
-        cursor = conn.cursor()
-
-        cursor.execute("""
-        INSERT INTO Users (name, email)
-        VALUES (?, ?)
-        """, (name, email))
-
-        conn.commit()
-
-        st.session_state.user_id = cursor.lastrowid
-        st.session_state.user_saved = True
-
-        st.success("✅ Details saved!")
-
 
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
