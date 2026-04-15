@@ -21,6 +21,16 @@ else:
     st.error("❌ Supabase secrets not found. Please check Streamlit Secrets.")
 
 
+def check_ai_used(user_id):
+    response = supabase.table("user_logs")\
+        .select("*")\
+        .eq("user_id", user_id)\
+        .eq("used_ai", 1)\
+        .execute()
+
+    return len(response.data) > 0
+
+
 def log_user(user_id, destination, days, budget, used_ai):
     supabase.table("userlogs").insert({
         "user_id": user_id,
@@ -295,8 +305,13 @@ ORDER BY day_number
 
 result = cursor.fetchall()
 
-if st.button("🤖 Generate AI Itinerary"):
-    st.session_state.show_ai_confirm = True
+ai_used = check_ai_used(st.session_state.user_id)
+
+if ai_used:
+    st.error("❌ You have already used AI itinerary. This is a paid feature.")
+else:
+    if st.button("🤖 Generate AI Itinerary"):
+        st.session_state.show_ai_confirm = True
 
 if st.session_state.show_ai_confirm:
 
