@@ -326,7 +326,7 @@ if st.session_state.get("use_ai", False):
             st.subheader("🤖 AI Generated Itinerary")
             st.write(ai_result)
 
-            log_user_supabase(
+            log_user(
                 st.session_state.user_id,
                 selected,
                 days,
@@ -337,8 +337,6 @@ if st.session_state.get("use_ai", False):
         except Exception as e:
             st.error(f"Error: {e}")
 
-
-st.write("DEBUG:", st.session_state)
 
 if st.button("Generate Plan"):
 
