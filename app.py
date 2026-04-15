@@ -307,8 +307,8 @@ if ai_used:
                         1
                     )
 
-               except Exception as e:
-                   st.error(f"Error: {e}")
+                except Exception as e:
+                    st.error(f"Error: {e}")
 
 
 else:
