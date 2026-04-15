@@ -307,6 +307,9 @@ result = cursor.fetchall()
 
 ai_used = check_ai_used(st.session_state.user_id)
 
+st.write("User ID:", st.session_state.user_id)
+st.write("AI Used:", ai_used)
+
 if ai_used:
     st.error("❌ You have already used AI itinerary. This is a paid feature.")
 else:
