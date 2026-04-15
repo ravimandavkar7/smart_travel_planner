@@ -286,6 +286,31 @@ ai_used = check_ai_used(st.session_state.user_id)
 
 if ai_used:
     st.error("❌ You have already used AI itinerary. This is a paid feature.")
+    st.subheader("🤖 AI Itinerary (Premium Feature)")
+    st.warning("💎 AI Itinerary costs ₹49")
+    st.link_button("💳 Pay ₹49", "https://rzp.io/rzp/v9eFBjz")
+    paid = st.checkbox("✅ I have completed payment")
+    if paid:
+        if st.button("Generate AI Itinerary"):
+            with st.spinner("Generating AI Itinerary..."):
+                try:
+                    ai_result = generate_itinerary(selected, days, budget)
+
+                    st.subheader("🤖 AI Generated Itinerary")
+                    st.write(ai_result)
+
+                    log_user(
+                        st.session_state.user_id,
+                        selected,
+                        days,
+                        budget,
+                        1
+                    )
+
+               except Exception as e:
+                   st.error(f"Error: {e}")
+
+
 else:
     if st.button("🤖 Generate AI Itinerary"):
         st.session_state.show_ai_confirm = True
