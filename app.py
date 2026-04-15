@@ -22,7 +22,7 @@ else:
 
 
 def check_ai_used(user_id):
-    response = supabase.table("user_logs")\
+    response = supabase.table("userlogs")\
         .select("*")\
         .eq("user_id", user_id)\
         .eq("used_ai", 1)\
