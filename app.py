@@ -14,6 +14,8 @@ razorpay_client = razorpay.Client(
     )
 )
 
+st.write(st.secrets)
+
 
 if "show_ai_confirm" not in st.session_state:
     st.session_state.show_ai_confirm = False
