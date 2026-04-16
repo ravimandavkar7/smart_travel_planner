@@ -42,7 +42,7 @@ def verify_payment(payment_id, order_id):
     try:
         payment = razorpay_client.payment.fetch(payment_id)
 
-        if payment["status"] == "captured" and payment["order_id"] == order_id:
+        if payment["status"] == "captured" and payment["amount"] == 4900:
             return True
         else:
             return False
