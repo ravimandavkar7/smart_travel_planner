@@ -6,6 +6,9 @@ from openai import OpenAI
 import uuid
 from supabase import create_client
 import razorpay
+import time
+
+unique_link = f"https://rzp.io/rzp/v9eFBjz?{int(time.time())}"
 
 try:
     razorpay_client = razorpay.Client(
@@ -336,7 +339,7 @@ if st.button("💳 Pay ₹49"):
     st.info("👉 Click below to complete payment")
 
     st.markdown("""
-    <a href="https://rzp.io/rzp/v9eFBjz" target="_blank">
+    <a href="{unique_link}" target="_blank">
         <button style="padding:10px 20px; background-color:green; color:white;">
             Pay Now
         </button>
