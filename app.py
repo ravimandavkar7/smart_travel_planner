@@ -20,9 +20,6 @@ except Exception as e:
     st.error(f"Razorpay error: {e}")
 
 
-st.write(st.secrets)
-
-
 if "show_ai_confirm" not in st.session_state:
     st.session_state.show_ai_confirm = False
 
