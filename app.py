@@ -7,12 +7,18 @@ import uuid
 from supabase import create_client
 import razorpay
 
-razorpay_client = razorpay.Client(
-    auth=(
-        st.secrets["RAZORPAY_KEY_ID"],
-        st.secrets["RAZORPAY_SECRET"]
+try:
+    razorpay_client = razorpay.Client(
+        auth=(
+            st.secrets["RAZORPAY_KEY_ID"],
+            st.secrets["RAZORPAY_SECRET"]
+        )
     )
-)
+    st.success("Razorpay connected ✅")
+
+except Exception as e:
+    st.error(f"Razorpay error: {e}")
+
 
 st.write(st.secrets)
 
