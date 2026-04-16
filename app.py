@@ -14,7 +14,7 @@ try:
             st.secrets["RAZORPAY_SECRET"]
         )
     )
-    st.success("Razorpay connected ✅")
+    
 
 except Exception as e:
     st.error(f"Razorpay error: {e}")
