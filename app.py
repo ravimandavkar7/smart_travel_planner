@@ -5,6 +5,15 @@ import os
 from openai import OpenAI
 import uuid
 from supabase import create_client
+import razorpay
+
+razorpay_client = razorpay.Client(
+    auth=(
+        st.secrets["RAZORPAY_KEY_ID"],
+        st.secrets["RAZORPAY_SECRET"]
+    )
+)
+
 
 if "show_ai_confirm" not in st.session_state:
     st.session_state.show_ai_confirm = False
@@ -19,6 +28,28 @@ if "SUPABASE_URL" in st.secrets and "SUPABASE_KEY" in st.secrets:
     )
 else:
     st.error("❌ Supabase secrets not found. Please check Streamlit Secrets.")
+
+def create_order(amount):
+    order = razorpay_client.order.create({
+        "amount": amount * 100,  # ₹49 → 4900
+        "currency": "INR",
+        "payment_capture": 1
+    })
+    return order
+
+
+def verify_payment(payment_id, order_id):
+    try:
+        payment = razorpay_client.payment.fetch(payment_id)
+
+        if payment["status"] == "captured" and payment["order_id"] == order_id:
+            return True
+        else:
+            return False
+
+    except:
+        return False
+
 
 
 def check_ai_used(user_id):
@@ -283,23 +314,60 @@ result = cursor.fetchall()
 
 ai_used = check_ai_used(st.session_state.user_id)
 
+if "order_id" not in st.session_state:
+    st.session_state.order_id = None
 
-if ai_used:
-    st.error("❌ You have already used AI itinerary. This is a paid feature.")
-    st.subheader("🤖 AI Itinerary (Premium Feature)")
-    st.warning("💎 AI Itinerary costs ₹49")
-    st.link_button("💳 Pay ₹49", "https://rzp.io/rzp/v9eFBjz")
-    paid = st.checkbox("✅ I have completed payment")
-    if paid:
-        if st.button("Generate AI Itinerary"):
-            with st.spinner("Generating AI Itinerary..."):
-                try:
+st.subheader("🤖 AI Itinerary (Premium Feature)")
+st.warning("💎 AI Itinerary costs ₹49")
+
+# STEP 1: Create Order
+if st.button("💳 Pay ₹49"):
+
+    order = create_order(49)
+
+    st.session_state.order_id = order["id"]
+
+    st.success("✅ Order created")
+    st.info("👉 Click below to complete payment")
+
+    st.markdown("""
+    <a href="https://rzp.io/rzp/v9eFBjz" target="_blank">
+        <button style="padding:10px 20px; background-color:green; color:white;">
+            Pay Now
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
+
+# STEP 2: Enter Payment ID
+payment_id = st.text_input("🔑 Enter Payment ID after payment")
+
+# STEP 3: Verify & Generate AI
+if st.button("Verify Payment & Generate AI"):
+
+    if st.session_state.order_id is None:
+        st.error("❌ Please click Pay first")
+
+    elif not payment_id:
+        st.error("❌ Enter payment ID")
+
+    else:
+        with st.spinner("Verifying payment..."):
+
+            if verify_payment(payment_id, st.session_state.order_id):
+
+                st.success("Payment verified ✅")
+
+                # (Optional) Prevent reuse
+                st.session_state.order_id = None
+
+                with st.spinner("Generating AI Itinerary..."):
+
                     ai_result = generate_itinerary(selected, days, budget)
 
                     st.subheader("🤖 AI Generated Itinerary")
                     st.write(ai_result)
 
-                    log_user(
+                    log_user_supabase(
                         st.session_state.user_id,
                         selected,
                         days,
@@ -307,54 +375,10 @@ if ai_used:
                         1
                     )
 
-                except Exception as e:
-                    st.error(f"Error: {e}")
+            else:
+                st.error("❌ Invalid payment or not matching this order")
 
-
-else:
-    if st.button("🤖 Generate AI Itinerary"):
-        st.session_state.show_ai_confirm = True
-
-if st.session_state.show_ai_confirm:
-
-    st.warning("⚠️ This is a chargeable feature. Do you want to continue?")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("✅ Yes, Continue"):
-            st.session_state.use_ai = True
-            st.session_state.show_ai_confirm = False
-
-    with col2:
-        if st.button("❌ No"):
-            st.session_state.show_ai_confirm = False
-
-#if st.session_state.use_ai:
-
-if st.session_state.get("use_ai", False):
-
-    st.session_state.use_ai = False  # ✅ prevent loop
-
-    with st.spinner("Generating AI Itinerary..."):
-        try:
-            ai_result = generate_itinerary(selected, days, budget)
-
-            st.subheader("🤖 AI Generated Itinerary")
-            st.write(ai_result)
-
-            log_user(
-                st.session_state.user_id,
-                selected,
-                days,
-                budget,
-                1
-            )
-
-        except Exception as e:
-            st.error(f"Error: {e}")
-
-
+	
 if st.button("Generate Plan"):
 
     log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
