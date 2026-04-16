@@ -328,23 +328,10 @@ if "order_id" not in st.session_state:
 st.subheader("🤖 AI Itinerary (Premium Feature)")
 st.warning("💎 AI Itinerary costs ₹49")
 
-# STEP 1: Create Order
-if st.button("💳 Pay ₹49"):
 
-    order = create_order(49)
+st.components.v1.html("""
+<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Se9I2ofYhgJpxI" async> </script> </form>""", height=200)
 
-    st.session_state.order_id = order["id"]
-
-    st.success("✅ Order created")
-    st.info("👉 Click below to complete payment")
-
-    st.markdown("""
-    <a href="{unique_link}" target="_blank">
-        <button style="padding:10px 20px; background-color:green; color:white;">
-            Pay Now
-        </button>
-    </a>
-    """, unsafe_allow_html=True)
 
 # STEP 2: Enter Payment ID
 payment_id = st.text_input("🔑 Enter Payment ID after payment")
@@ -352,42 +339,38 @@ payment_id = st.text_input("🔑 Enter Payment ID after payment")
 # STEP 3: Verify & Generate AI
 if st.button("Verify Payment & Generate AI"):
 
-    if st.session_state.order_id is None:
-        st.error("❌ Please click Pay first")
-
-    elif not payment_id:
+    if not payment_id:
         st.error("❌ Enter payment ID")
 
     else:
         with st.spinner("Verifying payment..."):
 
-            if verify_payment(payment_id, st.session_state.order_id):
+            if verify_payment(payment_id):
 
                 st.success("Payment verified ✅")
+                with st.spinner("Generating AI Itinerary..."):
 
-                # (Optional) Prevent reuse
-                st.session_state.order_id = None
-                try:
-                    with st.spinner("Generating AI Itinerary..."):
+                    try:
+                    
 
                         ai_result = generate_itinerary(selected, days, budget)
 
                         st.subheader("🤖 AI Generated Itinerary")
                         st.write(ai_result)
 
-                    log_user_supabase(
-                        st.session_state.user_id,
-                        selected,
-                        days,
-                        budget,
-                        1
-                    )
-                except Exception as e:
-                    st.error("❌ AI generation failed")
-                    st.error(str(e))
+                        log_user_supabase(
+                            st.session_state.user_id,
+                            selected,
+                            days,
+                            budget,
+                            1
+                        )
+                    except Exception as e:
+                        st.error("❌ AI generation failed")
+                        st.error(str(e))
 
             else:
-                st.error("❌ Invalid payment or not matching this order")
+                st.error("❌ Invalid or unpaid transaction")
 
 	
 if st.button("Generate Plan"):
