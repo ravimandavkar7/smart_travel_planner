@@ -38,29 +38,6 @@ if "SUPABASE_URL" in st.secrets and "SUPABASE_KEY" in st.secrets:
 else:
     st.error("❌ Supabase secrets not found. Please check Streamlit Secrets.")
 
-def create_order(amount):
-    order = razorpay_client.order.create({
-        "amount": amount * 100,  # ₹49 → 4900
-        "currency": "INR",
-        "payment_capture": 1
-    })
-    return order
-
-
-def verify_payment(payment_id):
-    try:
-        payment = razorpay_client.payment.fetch(payment_id)
-        st.write(payment)
-        if payment["status"] == "captured" and payment["amount"] == 4900:
-            return True
-        else:
-            return False
-
-    except Exception as e:
-        st.error(f"Verification error: {e}")
-        return False
-
-
 
 def check_ai_used(user_id):
     response = supabase.table("userlogs")\
@@ -285,7 +262,7 @@ div[data-testid="stNumberInput"] {
 min_day = int(data[1])
 days = st.selectbox(
     "Select Number of Days",
-    [min_day, min_day + 1, min_day + 2]
+    [min_day]
 )
 
 avg_budget=int(data[2])
@@ -322,11 +299,9 @@ if st.button("Generate Plan"):
     st.subheader("Your Itinerary")
 
     for i in range(days):
-        if i < len(result):
+        i < len(result):
             st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
-        else:
-            st.write(f"Day {i+1}: Free exploration")
-    
+           
     stay_budget=budget * 0.4
     st.subheader("Budget Breakdown")
     st.write("Stay:", stay_budget)
