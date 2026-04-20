@@ -154,7 +154,8 @@ h1, h2, h3, h4, h5, h6,  {
 div, span{
 color: white 
 }
-.stLinkButton a:hover{ background : black; color : white}
+.stLinkButton a:hover p{ background : black; color : white}
+
 </style>
 """, unsafe_allow_html=True)
 
