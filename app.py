@@ -305,8 +305,11 @@ if st.button("Generate Plan"):
     st.subheader("Your Itinerary")
 
     for i in range(days):
-        st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
-           
+        if i < len(result):
+            st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
+        else:
+            st.warning(f"📅 Day {i+1}: 💎 Detailed plan available in Premium (₹299)")
+       
     stay_budget=budget * 0.4
     st.subheader("Budget Breakdown")
     st.write("Stay:", stay_budget)
