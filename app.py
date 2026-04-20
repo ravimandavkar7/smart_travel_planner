@@ -391,7 +391,7 @@ if st.button("Generate Plan"):
            
     st.subheader("💎 Premium Travel Planning")
 
-    st.warning("Get 3–5 best hotels, contact numbers & transport guidance for ₹299")
+    st.warning("Get 3–5 best hotels, contact numbers & transport guidance for Just ₹299")
 
     st.info("📲 Pay ₹299 and send screenshot on WhatsApp")
 
