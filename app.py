@@ -46,7 +46,7 @@ def create_order(amount):
     return order
 
 
-def verify_payment(payment_id, order_id):
+def verify_payment(payment_id):
     try:
         payment = razorpay_client.payment.fetch(payment_id)
 
@@ -55,7 +55,8 @@ def verify_payment(payment_id, order_id):
         else:
             return False
 
-    except:
+    except Exception as e:
+        st.error(f"Verification error: {e}")
         return False
 
 
