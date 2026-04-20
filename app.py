@@ -19,6 +19,8 @@ try:
     )
     
 
+st.write("Key:", st.secrets["RAZORPAY_KEY_ID"])
+
 except Exception as e:
     st.error(f"Razorpay error: {e}")
 
