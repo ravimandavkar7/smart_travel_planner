@@ -350,62 +350,62 @@ if st.button("Generate Plan"):
         st.write(f"{place[0]} ({place[1]}) Place Rating ⭐{place[2]}: {place[3]}")
 
 
-        st.subheader("🏨 Recommended Hotels")
-        cursor.execute("""
-        SELECT hotel_name,price_per_night,rating,location
-        FROM Hotels
-        WHERE DestinationId = ?
-        """, (destination_id,))
+    st.subheader("🏨 Recommended Hotels")
+    cursor.execute("""
+    SELECT hotel_name,price_per_night,rating,location
+    FROM Hotels
+    WHERE DestinationId = ?
+    """, (destination_id,))
 
-        hotels = cursor.fetchall()
-        nights = days - 1
+    hotels = cursor.fetchall()
+    nights = days - 1
     
-        if nights <= 0:
-            nights = 1
+    if nights <= 0:
+        nights = 1
     
-        per_night_budget = (budget * 0.4) / nights
+    per_night_budget = (budget * 0.4) / nights
    
-        st.write(f"💡 Hotels under ₹{per_night_budget:.0f} per night")
-        for hotel in hotels:
-            price = float(hotel[1])
+    st.write(f"💡 Hotels under ₹{per_night_budget:.0f} per night")
+    for hotel in hotels:
+        price = float(hotel[1])
         
-            if price <= per_night_budget:
-                st.markdown(f"**🏨 {hotel[0]}**")
-                st.write(f"Price: ₹{hotel[1]} per night | Hotel Review Rating⭐: {hotel[2]} | location: {hotel[3]}")
-            else:
-                st.write("Curruntly No Hotel is available in your Budget Kindly contact for Budget Hotel.")
+        if price <= per_night_budget:
+            st.markdown(f"**🏨 {hotel[0]}**")
+            st.write(f"Price: ₹{hotel[1]} per night | Hotel Review Rating⭐: {hotel[2]} | location: {hotel[3]}")
+        else:
+            st.write("Curruntly No Hotel is available in your Budget Kindly contact for Budget Hotel.")
 
 
-        st.subheader("🚗 Travel Options")
+    st.subheader("🚗 Travel Options")
 
-        cursor.execute("""
-        SELECT mode, source_city, approx_cost, duration
-        FROM Transport
-        WHERE DestinationId = ?
-        """, (destination_id,))
+    cursor.execute("""
+    SELECT mode, source_city, approx_cost, duration
+    FROM Transport
+    WHERE DestinationId = ?
+    """, (destination_id,))
 
-        transport = cursor.fetchall()
+    transport = cursor.fetchall()
 
-        for t in transport:
-            st.write(f"{t[0]} from {t[1]} - ₹{t[2]} ({t[3]})")
-            
-        st.subheader("💎 Premium Travel Planning")
+    for t in transport:
+        st.write(f"{t[0]} from {t[1]} - ₹{t[2]} ({t[3]})")
+           
+    st.subheader("💎 Premium Travel Planning")
 
-        st.warning("Get 3–5 best hotels, contact numbers & transport guidance for ₹299")
+    st.warning("Get 3–5 best hotels, contact numbers & transport guidance for ₹299")
 
-        st.info("📲 Pay ₹299 and send screenshot on WhatsApp")
+    st.info("📲 Pay ₹299 and send screenshot on WhatsApp")
 
-        st.link_button(
-            "📞 Contact on WhatsApp",
-            "https://wa.me/919167159485"
-        )
+    st.link_button(
+        "📞 Contact on WhatsApp",
+        "https://wa.me/919167159485"
+    )
 
-        st.info(f"""
-        💡 Based on your total budget of ₹{budget}, we will:
-        
-        ✔ We’ll help you find best hotels within {stay_budget} budget\n 
-        ✔ Suggest best hotels within your budget\n 
-        ✔ Plan transport (bus/train/flight)\n  
-        ✔ Optimize your full trip cost\n  
-        """)
+    st.info(f"""
+    💡 Based on your total budget of ₹{budget}, we will:
+     
+    ✔ We’ll help you find best hotels within {stay_budget} budget\n 
+    ✔ Suggest best hotels within your budget\n 
+    ✔ Plan transport (bus/train/flight)\n  
+    ✔ Optimize your full trip cost\n  
+    """)
 
