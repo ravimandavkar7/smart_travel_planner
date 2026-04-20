@@ -330,7 +330,7 @@ st.warning("💎 AI Itinerary costs ₹49")
 
 
 st.components.v1.html("""
-<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Se9I2ofYhgJpxI" async> </script> </form>""", height=100)
+<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Se9I2ofYhgJpxI" async> </script> </form>""", height=500)
 
 
 # STEP 2: Enter Payment ID
