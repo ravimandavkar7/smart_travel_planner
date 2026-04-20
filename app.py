@@ -19,10 +19,11 @@ try:
     )
     
 
-st.write("Key:", st.secrets["RAZORPAY_KEY_ID"])
-
 except Exception as e:
     st.error(f"Razorpay error: {e}")
+
+
+st.write("Key:", st.secrets["RAZORPAY_KEY_ID"])
 
 
 if "show_ai_confirm" not in st.session_state:
