@@ -299,8 +299,7 @@ if st.button("Generate Plan"):
     st.subheader("Your Itinerary")
 
     for i in range(days):
-        i < len(result):
-            st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
+        st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
            
     stay_budget=budget * 0.4
     st.subheader("Budget Breakdown")
