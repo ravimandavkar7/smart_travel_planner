@@ -147,8 +147,11 @@ st.markdown("""
 # 3️⃣ Force Text Color
 st.markdown("""
 <style>
-h1, h2, h3, h4, h5, h6, p, div, span {
+h1, h2, h3, h4, h5, h6,  {
     color: white !important;
+}
+div, span{
+color: white 
 }
 </style>
 """, unsafe_allow_html=True)
