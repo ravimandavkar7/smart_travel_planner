@@ -49,7 +49,7 @@ def create_order(amount):
 def verify_payment(payment_id):
     try:
         payment = razorpay_client.payment.fetch(payment_id)
-
+        st.write(payment)
         if payment["status"] == "captured" and payment["amount"] == 4900:
             return True
         else:
