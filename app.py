@@ -23,8 +23,6 @@ except Exception as e:
     st.error(f"Razorpay error: {e}")
 
 
-st.write("Key:", st.secrets["RAZORPAY_KEY_ID"])
-
 
 if "show_ai_confirm" not in st.session_state:
     st.session_state.show_ai_confirm = False
@@ -352,7 +350,6 @@ if st.button("Generate Plan"):
         st.write(f"{place[0]} ({place[1]}) Place Rating ⭐{place[2]}: {place[3]}")
 
 
-    if selected == "Kedarnath":
         st.subheader("🏨 Recommended Hotels")
         cursor.execute("""
         SELECT hotel_name,price_per_night,rating,location
@@ -391,8 +388,7 @@ if st.button("Generate Plan"):
 
         for t in transport:
             st.write(f"{t[0]} from {t[1]} - ₹{t[2]} ({t[3]})")
-    else:
-         
+            
         st.subheader("💎 Premium Travel Planning")
 
         st.warning("Get 3–5 best hotels, contact numbers & transport guidance for ₹299")
