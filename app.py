@@ -89,23 +89,6 @@ if "user_id" not in st.session_state:
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-def generate_itinerary(destination, days, budget):
-    try:
-        prompt = f"""
-        Create a {days}-day travel itinerary for {destination} in India.
-        Budget: {budget} INR.
-        Include day-wise plan, places to visit, and tips.
-        """
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        return response.choices[0].message.content
-    except Exception as e:
-        return "⚠️ AI service not available. Please try again later."
-
 def set_bg(image_file):
     if not os.path.exists(image_file):
         st.warning(f"Image not found: {image_file}")
@@ -324,58 +307,6 @@ ORDER BY day_number
 
 result = cursor.fetchall()
 
-ai_used = check_ai_used(st.session_state.user_id)
-
-if "order_id" not in st.session_state:
-    st.session_state.order_id = None
-
-st.subheader("🤖 AI Itinerary (Premium Feature)")
-st.warning("💎 AI Itinerary costs ₹49")
-
-
-st.components.v1.html("""
-<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_SfgzYZNF6xI9k4" async> </script> </form>""", height=500)
-
-
-# STEP 2: Enter Payment ID
-payment_id = st.text_input("🔑 Enter Payment ID after payment")
-
-# STEP 3: Verify & Generate AI
-if st.button("Verify Payment & Generate AI"):
-
-    if not payment_id:
-        st.error("❌ Enter payment ID")
-
-    else:
-        with st.spinner("Verifying payment..."):
-
-            if verify_payment(payment_id):
-
-                st.success("Payment verified ✅")
-                with st.spinner("Generating AI Itinerary..."):
-
-                    try:
-                    
-
-                        ai_result = generate_itinerary(selected, days, budget)
-
-                        st.subheader("🤖 AI Generated Itinerary")
-                        st.write(ai_result)
-
-                        log_user_supabase(
-                            st.session_state.user_id,
-                            selected,
-                            days,
-                            budget,
-                            1
-                        )
-                    except Exception as e:
-                        st.error("❌ AI generation failed")
-                        st.error(str(e))
-
-            else:
-                st.error("❌ Invalid or unpaid transaction")
-
 	
 if st.button("Generate Plan"):
 
@@ -461,8 +392,17 @@ if st.button("Generate Plan"):
         for t in transport:
             st.write(f"{t[0]} from {t[1]} - ₹{t[2]} ({t[3]})")
     else:
-         # 💰 Upsell model
-        st.subheader("🏨 Hotels & Transport Planning")
+         
+        st.subheader("💎 Premium Travel Planning")
+
+        st.warning("Get 3–5 best hotels, contact numbers & transport guidance for ₹299")
+
+        st.info("📲 Pay ₹299 and send screenshot on WhatsApp")
+
+        st.link_button(
+            "📞 Contact on WhatsApp",
+            "https://wa.me/919167159485"
+        )
 
         st.info(f"""
         💡 Based on your total budget of ₹{budget}, we will:
@@ -471,9 +411,5 @@ if st.button("Generate Plan"):
         ✔ Suggest best hotels within your budget\n 
         ✔ Plan transport (bus/train/flight)\n  
         ✔ Optimize your full trip cost\n  
-
-        📩 Contact for personalized plan:
-        📧 ravimandavkar7@gmail.com  
-        📱 WhatsApp: +91-9167159485
         """)
 
