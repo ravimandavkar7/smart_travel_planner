@@ -442,7 +442,7 @@ if st.button("Generate Plan"):
         
         if price <= per_night_budget:
             st.markdown(f"**🏨 {hotel[0]}**")
-            st.write(f"Price: ₹{hotel[1]} per night | Hotel Review Rating⭐: {hotel[2]} | location: {hotel[3]}")
+            st.write(f"Price: ₹{hotel[1]} per night per person | Hotel Review Rating⭐: {hotel[2]} | location: {hotel[3]}")
         else:
             st.write("Curruntly No Hotel is available in your Budget Kindly contact for Budget Hotel.")
 
