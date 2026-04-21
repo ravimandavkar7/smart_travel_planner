@@ -137,6 +137,16 @@ user_budget = st.sidebar.number_input(
     step=1000
 )
 
+persons = st.sidebar.number_input(
+    "👨‍👩‍👧 Number of Persons",
+    min_value=1,
+    step=1
+)
+
+per_person_budget = user_budget / persons
+
+st.sidebar.info(f"💰 Per Person Budget: ₹{int(per_person_budget)}")
+
 search_clicked = st.sidebar.button("🔎 Search")
 
 if search_clicked:
@@ -151,7 +161,7 @@ if search_clicked:
         season = row[1]
         avg_budget = row[2]
 
-        if month_in_season(month, season) and avg_budget <= user_budget:
+        if month_in_season(month, season) and avg_budget <= per_person_budget:
             filtered_places.append(name)
 
     st.sidebar.subheader("🌍 Recommended")
