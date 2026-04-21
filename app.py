@@ -110,7 +110,6 @@ conn = sqlite3.connect("tripplanner.db")
 
 cursor = conn.cursor()
 
-st.title("Smart Travel Planner ✈️")
 
 #for filter
 cursor.execute("SELECT Destination, best_season, avg_budget FROM Destination")
@@ -142,6 +141,9 @@ if filtered_places:
         st.write(f"📍 {place}")
 else:
     st.warning("No destinations found for this month & budget")
+
+
+st.title("Smart Travel Planner ✈️")
 
 
 # Dropdown from DB
