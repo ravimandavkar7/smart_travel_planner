@@ -150,8 +150,7 @@ st.sidebar.info(f"💰 Per Person Budget: ₹{int(per_person_budget)}")
 search_clicked = st.sidebar.button("🔎 Search")
 
 if search_clicked:
-    cursor.execute("""SELECT DISTINCT ds.Destination, ds.best_season FROM Destination ds JOIN AvgBudget ab ON ds.DestinationId = ab.DestinationId WHERE 
-        ab.Budget <= ?""",(per_person_budget,))
+    cursor.execute("""SELECT DISTINCT ds.Destination, ds.best_season FROM Destination ds JOIN AvgBudget ab ON ds.DestinationId = ab.DestinationId WHERE ab.Budget <= ?""",(per_person_budget,))
     rows = cursor.fetchall()
 
     filtered_places = []
