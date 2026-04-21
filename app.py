@@ -113,7 +113,7 @@ cursor = conn.cursor()
 st.title("Smart Travel Planner ✈️")
 
 #for filter
-cursor.execute("SELECT destination_name, best_season, avg_budget FROM destinations")
+cursor.execute("SELECT Destination, best_season, avg_budget FROM Destination")
 rows=cursor.fetchall()
 
 filter_destinations = []
