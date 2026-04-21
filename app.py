@@ -151,7 +151,8 @@ search_clicked = st.sidebar.button("🔎 Search")
 
 if search_clicked:
 
-    cursor.execute("SELECT Destination, best_season, avg_budget FROM Destination")
+    cursor.execute("""SELECT DISTINCT ds.Destination, ds.best_season FROM Destination ds JOIN AvgBudget ab ON ds.DestinationId = ab.DestinationId WHERE 
+    ab.Budget <= ?""",(per_person_budget,))
     rows = cursor.fetchall()
 
     filtered_places = []
@@ -397,7 +398,7 @@ if st.button("Generate Plan"):
             st.write(f"Day {i+1}: {result[i][1]}: {result[i][2]}")
         else:
             st.warning(f"📅 Day {i+1}: 💎 Detailed plan available in Premium (₹299)")
-       
+       c
     stay_budget=budget * 0.4
     st.subheader("Budget Breakdown")
     st.write("Stay:", stay_budget)
