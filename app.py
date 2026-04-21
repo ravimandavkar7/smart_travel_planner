@@ -10,18 +10,42 @@ import time
 
 unique_link = f"https://rzp.io/rzp/v9eFBjz?{int(time.time())}"
 
-try:
-    razorpay_client = razorpay.Client(
-        auth=(
-            st.secrets["RAZORPAY_KEY_ID"],
-            st.secrets["RAZORPAY_SECRET"]
-        )
-    )
-    
+st.sidebar.header("🔍 Find Best Destinations")
 
-except Exception as e:
-    st.error(f"Razorpay error: {e}")
+month = st.sidebar.selectbox(
+    "Select Travel Month",
+    ["January","February","March","April","May","June",
+     "July","August","September","October","November","December"]
+)
 
+user_budget = st.sidebar.number_input(
+    "Enter Your Budget (₹)",
+    min_value=1000,
+    step=1000
+)
+
+
+def month_in_season(user_month, season_range):
+    months = ["January","February","March","April","May","June",
+              "July","August","September","October","November","December"]
+
+    try:
+        start, end = season_range.split("-")
+        start_idx = months.index(start)
+        end_idx = months.index(end)
+
+        # Case 1: normal range (April-June)
+        if start_idx <= end_idx:
+            valid_months = months[start_idx:end_idx+1]
+
+        # Case 2: cross-year (October-March)
+        else:
+            valid_months = months[start_idx:] + months[:end_idx+1]
+
+        return user_month in valid_months
+
+    except:
+        return False
 
 
 if "show_ai_confirm" not in st.session_state:
@@ -87,6 +111,38 @@ conn = sqlite3.connect("tripplanner.db")
 cursor = conn.cursor()
 
 st.title("Smart Travel Planner ✈️")
+
+#for filter
+cursor.execute("SELECT destination_name, best_season, avg_budget FROM destinations")
+rows=cursor.fetchall()
+
+filter_destinations = []
+
+for row in rows:
+    filter_destinations.append({
+        "destination_name": row[0],
+        "best_season": row[1],
+        "avg_budget": row[2]
+    })
+
+filtered_places = []
+
+for dest in filter_destinations:
+    name = dest["destination_name"]
+    season = dest["best_season"]
+    avg_budget = dest["avg_budget"]
+
+    if month_in_season(month, season) and avg_budget <= user_budget:
+        filtered_places.append(name)
+
+st.subheader("🌍 Recommended Destinations")
+
+if filtered_places:
+    for place in filtered_places:
+        st.write(f"📍 {place}")
+else:
+    st.warning("No destinations found for this month & budget")
+
 
 # Dropdown from DB
 cursor.execute("SELECT Destination FROM Destination")
