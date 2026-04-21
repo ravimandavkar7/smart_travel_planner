@@ -151,7 +151,7 @@ search_clicked = st.sidebar.button("🔎 Search")
 
 if search_clicked:
     cursor.execute("""
-        SELECT DISTINCT ds.Destination, ds.best_season, ab.Budget
+        SELECT DISTINCT ds.Destination, ds.best_season, MIN(ab.Budget)
         FROM Destination ds
         JOIN AvgBudget ab ON ds.DestinationId = ab.DestinationId
         WHERE ab.Budget <= ?
