@@ -480,3 +480,11 @@ if st.button("Generate Plan"):
     💰 **Optimize your complete trip cost**\n  
     """)
 
+
+st.info("""
+💬 Didn’t find your destination?
+
+📲 Contact us on WhatsApp — we’ll provide basic travel guidance for FREE.
+""")
+
+st.link_button("📲 Chat on WhatsApp", "https://wa.me/919167159485")
