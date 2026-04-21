@@ -99,15 +99,27 @@ cursor = conn.cursor()
 
 st.markdown("""
 <style>
+
+/* Sidebar background */
 section[data-testid="stSidebar"] {
     background-color: #111;
 }
-section[data-testid="stSidebar"] * {
+
+/* Labels (titles, text) */
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] .stMarkdown {
     color: white !important;
 }
+
+/* Input fields (VERY IMPORTANT FIX) */
+section[data-testid="stSidebar"] input,
+section[data-testid="stSidebar"] select {
+    color: black !important;
+    background-color: white !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
-
 
 
 #for filter
