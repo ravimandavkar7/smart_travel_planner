@@ -10,19 +10,6 @@ import time
 
 unique_link = f"https://rzp.io/rzp/v9eFBjz?{int(time.time())}"
 
-st.sidebar.header("🔍 Find Best Destinations")
-
-month = st.sidebar.selectbox(
-    "Select Travel Month",
-    ["January","February","March","April","May","June",
-     "July","August","September","October","November","December"]
-)
-
-user_budget = st.sidebar.number_input(
-    "Enter Your Budget (₹)",
-    min_value=1000,
-    step=1000
-)
 
 
 def month_in_season(user_month, season_range):
@@ -110,37 +97,58 @@ conn = sqlite3.connect("tripplanner.db")
 
 cursor = conn.cursor()
 
+st.markdown("""
+<style>
+section[data-testid="stSidebar"] {
+    background-color: #111;
+}
+section[data-testid="stSidebar"] * {
+    color: white !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
 
 #for filter
-cursor.execute("SELECT Destination, best_season, avg_budget FROM Destination")
-rows=cursor.fetchall()
+st.sidebar.header("🔍 Find Best Destinations")
 
-filter_destinations = []
+month = st.sidebar.selectbox(
+    "Select Travel Month",
+    ["January","February","March","April","May","June",
+     "July","August","September","October","November","December"]
+)
 
-for row in rows:
-    filter_destinations.append({
-        "destination_name": row[0],
-        "best_season": row[1],
-        "avg_budget": row[2]
-    })
+user_budget = st.sidebar.number_input(
+    "Enter Your Budget (₹)",
+    min_value=1000,
+    step=1000
+)
 
-filtered_places = []
+search_clicked = st.sidebar.button("🔎 Search")
 
-for dest in filter_destinations:
-    name = dest["destination_name"]
-    season = dest["best_season"]
-    avg_budget = dest["avg_budget"]
+if search_clicked:
 
-    if month_in_season(month, season) and avg_budget <= user_budget:
-        filtered_places.append(name)
+    cursor.execute("SELECT Destination, best_season, avg_budget FROM Destination")
+    rows = cursor.fetchall()
 
-st.subheader("🌍 Recommended Destinations")
+    filtered_places = []
 
-if filtered_places:
-    for place in filtered_places:
-        st.write(f"📍 {place}")
-else:
-    st.warning("No destinations found for this month & budget")
+    for row in rows:
+        name = row[0]
+        season = row[1]
+        avg_budget = row[2]
+
+        if month_in_season(month, season) and avg_budget <= user_budget:
+            filtered_places.append(name)
+
+    st.sidebar.subheader("🌍 Recommended")
+
+    if filtered_places:
+        for place in filtered_places:
+            st.sidebar.write(f"📍 {place}")
+    else:
+        st.sidebar.warning("No destinations found")
 
 
 st.title("Smart Travel Planner ✈️")
