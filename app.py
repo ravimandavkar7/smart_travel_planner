@@ -155,6 +155,7 @@ if search_clicked:
         FROM Destination ds
         JOIN AvgBudget ab ON ds.DestinationId = ab.DestinationId
         WHERE ab.Budget <= ?
+        group by Destination
     """, (per_person_budget,))
 
     rows = cursor.fetchall()
