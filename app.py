@@ -463,8 +463,8 @@ if st.button("Generate Plan"):
         for hotel in filtered_hotels:
             st.markdown(f"**🏨 {hotel[0]}**")
             st.write(f"Price: ₹{hotel[1]} per night per person | ⭐ {hotel[2]} | 📍 {hotel[3]}")
-        else:
-            st.write("❌ No hotels available in your budget. Contact us for better options.")
+    else:
+        st.write("❌ No hotels available in your budget. Contact us for better options.")
 
 
     st.subheader("🚗 Travel Options")
