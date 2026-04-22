@@ -188,7 +188,7 @@ destinations = [row[0] for row in cursor.fetchall()]
 selected = st.selectbox("Select Destination", destinations)
 
 cursor.execute("""
-SELECT DestinationId, Min_day, avg_budget,image_path
+SELECT DestinationId, Min_day, image_path
 FROM Destination
 WHERE Destination=?
 """, (selected,))
@@ -197,9 +197,19 @@ data = cursor.fetchone()
 
 destination_id = data[0]
 min_day = data[1]
-avg_budget = data[2]
-image_path=data[3]
+image_path = data[2]
 
+cursor.execute("""
+SELECT Budget 
+FROM AvgBudget
+WHERE DestinationId=?
+ORDER BY Budget
+""", (destination_id,))
+
+budget_rows = cursor.fetchall()
+
+# Convert to list
+budget_options = [row[0] for row in budget_rows]
 
 
 
@@ -364,10 +374,9 @@ days = st.selectbox(
     [min_day]
 )
 
-avg_budget=int(data[2])
 budget = st.selectbox(
     "Select Budget ₹",
-    [avg_budget, avg_budget + 2000, avg_budget + 5000]
+    budget_options
 )
 
 
@@ -384,7 +393,7 @@ result = cursor.fetchall()
 	
 if st.button("Generate Plan"):
 
-    log_user(st.session_state.user_id, selected, min_day, avg_budget, 0)
+    log_user(st.session_state.user_id, selected, min_day, budget, 0)
 
     cursor.execute("""
     select day_number,title,it.Description 
