@@ -449,16 +449,22 @@ if st.button("Generate Plan"):
         nights = 1
     
     per_night_budget = (budget * 0.4) / nights
-   
-    st.write(f"💡 Hotels under ₹{per_night_budget:.0f} per night")
+    
+    filtered_hotels = []
+    
     for hotel in hotels:
         price = float(hotel[1])
-        
         if price <= per_night_budget:
+            filtered_hotels.append(hotel)
+   
+    st.write(f"💡 Hotels under ₹{per_night_budget:.0f} per night")
+    
+    if filtered_hotels:
+        for hotel in filtered_hotels:
             st.markdown(f"**🏨 {hotel[0]}**")
-            st.write(f"Price: ₹{hotel[1]} per night per person | Hotel Review Rating⭐: {hotel[2]} | location: {hotel[3]}")
+            st.write(f"Price: ₹{hotel[1]} per night per person | ⭐ {hotel[2]} | 📍 {hotel[3]}")
         else:
-            st.write("Curruntly No Hotel is available in your Budget Kindly contact for Budget Hotel.")
+            st.write("❌ No hotels available in your budget. Contact us for better options.")
 
 
     st.subheader("🚗 Travel Options")
