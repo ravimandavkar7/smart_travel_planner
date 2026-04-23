@@ -121,6 +121,8 @@ section[data-testid="stSidebar"] select {
 </style>
 """, unsafe_allow_html=True)
 
+if st.session_state.get("show_mobile_hint", True):
+    st.warning("📱 Tap ☰ on top-left to open filters & recommendations")
 
 #for filter
 st.sidebar.header("🔍 Find Best Destinations")
