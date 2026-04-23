@@ -83,25 +83,11 @@ def set_bg(image_file):
         encoded = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
-   <style>
+    <style>
     .stApp {{
-        background:
-            linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
-            url("data:image/jpg;base64,{encoded}");
+        background-image: url("data:image/jpg;base64,{encoded}");
         background-size: cover;
         background-position: center;
-        background-repeat: no-repeat;
-    }}
-
-    /* 📱 Mobile view */
-    @media (max-width: 768px) {{
-        .stApp {{
-            background:
-                linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.35)),
-                url("data:image/jpg;base64,{encoded}");
-            background-size: cover;
-            background-position: center;
-        }}
     }}
     </style>
     """, unsafe_allow_html=True)
@@ -217,9 +203,6 @@ data = cursor.fetchone()
 destination_id = data[0]
 min_day = data[1]
 image_path = data[2]
-
-st.image(image_path, use_container_width=True)
-
 
 cursor.execute("""
 SELECT Budget 
