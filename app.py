@@ -218,7 +218,6 @@ destination_id = data[0]
 min_day = data[1]
 image_path = data[2]
 
-st.markdown(f"### 📍 {selected}")
 st.image(image_path, use_container_width=True)
 
 
