@@ -83,10 +83,13 @@ def set_bg(image_file):
         encoded = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
-    <style>
+   <style>
     .stApp {{
-        background: 
-            linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.15),   /* top light */
+                rgba(0,0,0,0.55)    /* bottom darker */
+            ),
             url("data:image/jpg;base64,{encoded}");
         background-size: cover;
         background-position: center;
