@@ -483,11 +483,11 @@ if st.button("Generate Plan"):
            
     st.subheader("💎 Premium Travel Planning")
 
-    st.warning("Get the best hotels, contact details & complete transport guidance for Just ₹499")
+    st.warning("Get the best hotels, verified contact details, and complete transport guidance — all in one personalized plan.")
 
     st.info("📲 To know more about itinerary and travel planning, contact us")
 
-    st.info("💰 Pay ₹499 and share the payment screenshot to get started.")
+    st.info("💰 Pay ₹499 and share the screenshot to get started instantly.")
 
     st.link_button(
         "📞 Contact on WhatsApp",
@@ -497,10 +497,10 @@ if st.button("Generate Plan"):
     st.info(f"""
     💡 Based on your total budget of ₹{budget}, we will:
      
-    🏨 **Find best hotels within your budget ({stay_budget})**\n 
+    🏨 **Recommend best hotels within your budget ({stay_budget})**\n 
     📞 **Share verified hotel contact details**\n 
     🚆 **Plan transport (bus/train/flight)**\n  
-    💰 **Optimize your complete trip cost**\n  
+    💰 **Optimize your complete trip cost for maximum savings**\n  
     """)
 
 
