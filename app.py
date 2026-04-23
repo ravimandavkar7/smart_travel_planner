@@ -205,8 +205,6 @@ cursor.execute("SELECT Destination FROM Destination")
 destinations = [row[0] for row in cursor.fetchall()]
 
 selected = st.selectbox("Select Destination", destinations)
-st.markdown(f"### 📍 {selected}")
-st.image(image_path, use_container_width=True)
 
 cursor.execute("""
 SELECT DestinationId, Min_day, image_path
@@ -219,6 +217,10 @@ data = cursor.fetchone()
 destination_id = data[0]
 min_day = data[1]
 image_path = data[2]
+
+st.markdown(f"### 📍 {selected}")
+st.image(image_path, use_container_width=True)
+
 
 cursor.execute("""
 SELECT Budget 
