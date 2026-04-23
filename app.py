@@ -181,8 +181,11 @@ if search_clicked:
 
 st.title("Smart Travel Planner ✈️")
 
-st.caption("📱 Mobile User Use >> menu for Find Best Destination")
-
+if "shown_hint" not in st.session_state:
+    st.markdown("""
+    📱 **Mobile User Use >> menu for Find Best Destination**
+    """)
+    
 # Dropdown from DB
 cursor.execute("SELECT Destination FROM Destination")
 destinations = [row[0] for row in cursor.fetchall()]
