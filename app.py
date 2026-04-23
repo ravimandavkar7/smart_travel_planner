@@ -86,14 +86,22 @@ def set_bg(image_file):
    <style>
     .stApp {{
         background:
-            linear-gradient(
-                rgba(0,0,0,0.15),   /* top light */
-                rgba(0,0,0,0.55)    /* bottom darker */
-            ),
+            linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
             url("data:image/jpg;base64,{encoded}");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+    }}
+
+    /* 📱 Mobile view */
+    @media (max-width: 768px) {{
+        .stApp {{
+            background:
+                linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.35)),
+                url("data:image/jpg;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+        }}
     }}
     </style>
     """, unsafe_allow_html=True)
