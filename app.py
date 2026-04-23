@@ -182,9 +182,14 @@ if search_clicked:
 st.title("Smart Travel Planner ✈️")
 
 if "shown_hint" not in st.session_state:
-    st.caption("📱 Tap >> on top-left for filters")
+    st.caption("📱 Tap >> on top-left for Find Best Destination")
     st.session_state.shown_hint = True
+    
+    st.markdown("""
+    📱 **Using mobile?**
 
+    👉 Tap the **>> menu on top-left** to open filters and see recommended destinations.
+    """)
 
 # Dropdown from DB
 cursor.execute("SELECT Destination FROM Destination")
