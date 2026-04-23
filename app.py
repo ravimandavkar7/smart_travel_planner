@@ -183,7 +183,7 @@ st.title("Smart Travel Planner ✈️")
 
 if "shown_hint" not in st.session_state:
     st.markdown("""
-    📱 **Mobile User Use >> menu for Find Best Destination**
+    📱 **Mobile User Use top-left >> menu for Find Best Destination**
     """)
     
 # Dropdown from DB
