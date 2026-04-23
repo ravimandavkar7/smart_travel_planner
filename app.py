@@ -121,8 +121,6 @@ section[data-testid="stSidebar"] select {
 </style>
 """, unsafe_allow_html=True)
 
-if st.session_state.get("show_mobile_hint", True):
-    st.warning("📱 Tap ☰ on top-left to open filters & recommendations")
 
 #for filter
 st.sidebar.header("🔍 Find Best Destinations")
@@ -182,6 +180,10 @@ if search_clicked:
 
 
 st.title("Smart Travel Planner ✈️")
+
+if "shown_hint" not in st.session_state:
+    st.caption("📱 Tap >> on top-left for filters")
+    st.session_state.shown_hint = True
 
 
 # Dropdown from DB
