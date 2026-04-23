@@ -194,8 +194,6 @@ if search_clicked:
 
 
 st.title("Smart Travel Planner ✈️")
-st.markdown(f"### 📍 {selected}")
-st.image(image_path, use_container_width=True)
 
 if "shown_hint" not in st.session_state:
     st.markdown("""
@@ -207,6 +205,8 @@ cursor.execute("SELECT Destination FROM Destination")
 destinations = [row[0] for row in cursor.fetchall()]
 
 selected = st.selectbox("Select Destination", destinations)
+st.markdown(f"### 📍 {selected}")
+st.image(image_path, use_container_width=True)
 
 cursor.execute("""
 SELECT DestinationId, Min_day, image_path
