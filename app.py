@@ -85,9 +85,12 @@ def set_bg(image_file):
     st.markdown(f"""
     <style>
     .stApp {{
-        background-image: url("data:image/jpg;base64,{encoded}");
+        background: 
+            linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+            url("data:image/jpg;base64,{encoded}");
         background-size: cover;
         background-position: center;
+        background-repeat: no-repeat;
     }}
     </style>
     """, unsafe_allow_html=True)
