@@ -194,6 +194,8 @@ if search_clicked:
 
 
 st.title("Smart Travel Planner ✈️")
+st.markdown(f"### 📍 {selected}")
+st.image(image_path, use_container_width=True)
 
 if "shown_hint" not in st.session_state:
     st.markdown("""
