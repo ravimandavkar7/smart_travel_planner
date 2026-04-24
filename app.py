@@ -261,7 +261,7 @@ st.markdown("""
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.35);
     z-index: 0;
 }
 
@@ -277,7 +277,7 @@ st.markdown("""
 st.markdown("""
 <style>
 .block-container {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.4);
     padding: 2rem;
     border-radius: 15px;
 }
