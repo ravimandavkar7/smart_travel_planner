@@ -10,16 +10,6 @@ import time
 
 unique_link = f"https://rzp.io/rzp/v9eFBjz?{int(time.time())}"
 
-st.markdown("""
-<style>
-/* Hide top header */
-header {visibility: hidden;}
-/* Remove extra top spacing */
-.block-container {
-    padding-top: 1rem;
-}
-</style>
-""", unsafe_allow_html=True)
 
 
 def month_in_season(user_month, season_range):
@@ -213,29 +203,6 @@ data = cursor.fetchone()
 destination_id = data[0]
 min_day = data[1]
 image_path = data[2]
-
-def show_mobile_image(image_path):
-    with open(image_path, "rb") as img:
-        encoded = base64.b64encode(img.read()).decode()
-
-    st.markdown(f"""
-    <style>
-    .mobile-image {{
-        display: none;
-    }}
-
-    @media (max-width: 768px) {{
-        .mobile-image {{
-            display: block;
-            margin-top: 10px;
-        }}
-    }}
-    </style>
-
-    <div class="mobile-image">
-        <img src="data:image/jpeg;base64,{encoded}" width="100%" style="border-radius:10px;">
-    </div>
-    """, unsafe_allow_html=True)
 
 cursor.execute("""
 SELECT Budget 
