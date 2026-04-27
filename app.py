@@ -231,10 +231,13 @@ if search_text:
     if filtered_destinations:
         st.write("### 🌍 Suggestions")
 
-        # ✅ LIMIT results (important)
-        for place in filtered_destinations[:6]:
-            if st.button(f"📍 {place}", key=place):
-                st.session_state.selected_place = place
+        # ✅ ADD HERE
+        cols = st.columns(2)
+
+        for i, place in enumerate(filtered_destinations[:6]):
+            with cols[i % 2]:
+                if st.button(f"📍 {place}", key=place):
+                    st.session_state.selected_place = place
 
     else:
         st.warning("❌ No matching destinations found")
