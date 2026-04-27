@@ -225,62 +225,20 @@ if "destinations" not in st.session_state:
     cursor.execute("SELECT Destination FROM Destination")
     st.session_state.destinations = sorted([row[0] for row in cursor.fetchall()])
 
+# ✅ ADD HERE (MAIN SELECT)
+st.markdown("### 🌍 Choose Your Destination")
 
-# 🔍 Search box
-search_text = st.text_input("🔍 Search Destination")
-
-selected = None
-
-# 👉 Autocomplete suggestions (live)
-if search_text:
-    filtered_destinations = [
-        d for d in st.session_state.destinations
-        if search_text.lower() in d.lower()
-    ]
-
-    if filtered_destinations:
-        st.markdown("#### 🌍 Suggestions")
-
-        # 👇 show like dropdown list (no buttons look)
-        for place in filtered_destinations[:6]:
-            if st.markdown(
-                f"""
-                <div style="
-                    padding:8px;
-                    border-bottom:1px solid #eee;
-                    cursor:pointer;
-                ">
-                📍 {place}
-                </div>
-                """,
-                unsafe_allow_html=True
-            ):
-                pass  # (visual only)
-        
-        # 👇 actual selection (clickable)
-        selected = st.radio(
-            "",
-            filtered_destinations[:6],
-            label_visibility="collapsed"
-        )
-
-    else:
-        st.warning("❌ No matching destinations found")
-
-# store selected
-if selected:
-    st.session_state.selected_place = selected
-
-if "selected_place" in st.session_state:
-    selected = st.session_state.selected_place
-
-
+selected = st.selectbox(
+    "Select Destination",
+    st.session_state.destinations,
+    index=None,
+    placeholder="🔽 Select destination from list"
+)
 
 # ✅ STOP if nothing selected
 if not selected:
     st.info("👆 Please select a destination to continue")
     st.stop()
-
 
 # ✅ DB Query
 cursor.execute("""
