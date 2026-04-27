@@ -99,23 +99,26 @@ cursor = conn.cursor()
 
 st.markdown("""
 <style>
-/* Force sidebar to scroll */
-section[data-testid="stSidebar"] {
-    height: 100vh;
-    overflow-y: auto;
+
+/* FIX SCROLL ISSUE - target inner sidebar */
+section[data-testid="stSidebar"] > div {
+    height: 100vh !important;
+    overflow-y: auto !important;
+    padding-bottom: 50px;
 }
 
-/* Smooth scrollbar (optional) */
-section[data-testid="stSidebar"]::-webkit-scrollbar {
+/* Optional: better scrollbar */
+section[data-testid="stSidebar"] > div::-webkit-scrollbar {
     width: 6px;
 }
-
-section[data-testid="stSidebar"]::-webkit-scrollbar-thumb {
+section[data-testid="stSidebar"] > div::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
 }
+
 </style>
 """, unsafe_allow_html=True)
+
 
 
 st.markdown("""
