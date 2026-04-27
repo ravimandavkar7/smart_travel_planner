@@ -223,6 +223,11 @@ selected = st.selectbox(
     key="destination_select"
 )
 
+# Reset dropdown after selection (IMPORTANT)
+if selected:
+    st.session_state.destination_select = selected
+
+
 # ✅ STOP if nothing selected
 if not selected:
     st.info("👆 Please select a destination to continue")
