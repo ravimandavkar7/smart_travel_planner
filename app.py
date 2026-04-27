@@ -233,7 +233,8 @@ else:
 selected = st.selectbox(
     "Select Destination",
     filtered_destinations,
-    index=0 if filtered_destinations else None
+    index=None,
+    placeholder="🔍 Select destination..."
 )
 
 # Optional: show message if no match
