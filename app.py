@@ -219,28 +219,36 @@ if "destinations" not in st.session_state:
 # 🔍 Search box
 search_text = st.text_input("🔍 Search Destination")
 
-# Filter results
-filtered_destinations = [
-    d for d in st.session_state.destinations
-    if search_text.lower() in d.lower()
-] if search_text else []
+if st.button("📋 Show All Destinations"):
+    st.session_state.show_all = True
 
-# Show suggestions (auto)
+# Case-insensitive matching (anywhere in name)
+if search_text:
+    filtered_destinations = [
+        d for d in st.session_state.destinations
+        if search_text.lower() in d.lower()
+    ]
+else:
+    # 👇 Show default suggestions when nothing typed
+    filtered_destinations = st.session_state.destinations[:6]  # top 6
+
 selected = None
 
-if search_text:
-    if filtered_destinations:
-        st.write("### Suggestions")
-        for place in filtered_destinations:
-            if st.button(f"📍 {place}", key=place):
-                selected = place
-                st.session_state.selected_place = place
-    else:
-        st.warning("❌ No matching destinations found")
+# Show suggestions
+if filtered_destinations:
+    st.write("### 🌍 Suggestions")
+
+    for place in filtered_destinations:
+        if st.button(f"📍 {place}", key=place):
+            st.session_state.selected_place = place
+            selected = place
+else:
+    st.warning("❌ No matching destinations found")
 
 # Keep selected value
 if "selected_place" in st.session_state:
     selected = st.session_state.selected_place
+
 
 # ✅ STOP if nothing selected
 if not selected:
