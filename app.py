@@ -213,10 +213,17 @@ if "shown_hint" not in st.session_state:
     """)
     
 # Dropdown from DB
-cursor.execute("SELECT Destination FROM Destination")
-destinations = [row[0] for row in cursor.fetchall()]
+if "destinations" not in st.session_state:
+    cursor.execute("SELECT Destination FROM Destination")
+    st.session_state.destinations = sorted([row[0] for row in cursor.fetchall()])
 
-selected = st.selectbox("Select Destination", destinations)
+selected = st.selectbox(
+    "Select Destination",
+    st.session_state.destinations,
+    index=None,
+    placeholder="🔍 Search destination...",
+    key="destination_select"
+)
 
 cursor.execute("""
 SELECT DestinationId, Min_day, image_path
