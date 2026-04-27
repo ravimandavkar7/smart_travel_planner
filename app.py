@@ -220,7 +220,6 @@ selected = st.selectbox(
     st.session_state.destinations,
     index=None,
     placeholder="🔍 Search destination...",
-    key="destination_select"
 )
 
 # Reset dropdown after selection (IMPORTANT)
