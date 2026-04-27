@@ -99,6 +99,16 @@ cursor = conn.cursor()
 
 st.markdown("""
 <style>
+div[role="radiogroup"] > label {
+    padding: 6px;
+    border-bottom: 1px solid #eee;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+st.markdown("""
+<style>
 
 /* FIX SCROLL ISSUE - target inner sidebar */
 section[data-testid="stSidebar"] > div {
@@ -221,7 +231,7 @@ search_text = st.text_input("🔍 Search Destination")
 
 selected = None
 
-# 👉 Show suggestions ONLY when user types
+# 👉 Autocomplete suggestions (live)
 if search_text:
     filtered_destinations = [
         d for d in st.session_state.destinations
@@ -229,20 +239,38 @@ if search_text:
     ]
 
     if filtered_destinations:
-        st.write("### 🌍 Suggestions")
+        st.markdown("#### 🌍 Suggestions")
 
-        # ✅ ADD HERE
-        cols = st.columns(2)
-
-        for i, place in enumerate(filtered_destinations[:6]):
-            with cols[i % 2]:
-                if st.button(f"📍 {place}", key=place):
-                    st.session_state.selected_place = place
+        # 👇 show like dropdown list (no buttons look)
+        for place in filtered_destinations[:6]:
+            if st.markdown(
+                f"""
+                <div style="
+                    padding:8px;
+                    border-bottom:1px solid #eee;
+                    cursor:pointer;
+                ">
+                📍 {place}
+                </div>
+                """,
+                unsafe_allow_html=True
+            ):
+                pass  # (visual only)
+        
+        # 👇 actual selection (clickable)
+        selected = st.radio(
+            "",
+            filtered_destinations[:6],
+            label_visibility="collapsed"
+        )
 
     else:
         st.warning("❌ No matching destinations found")
 
-# 👉 Keep selected value
+# store selected
+if selected:
+    st.session_state.selected_place = selected
+
 if "selected_place" in st.session_state:
     selected = st.session_state.selected_place
 
