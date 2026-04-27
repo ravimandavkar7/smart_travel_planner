@@ -216,31 +216,31 @@ if "destinations" not in st.session_state:
     st.session_state.destinations = sorted([row[0] for row in cursor.fetchall()])
 
 
-# 🔍 ✅ ADD THIS (Search box for mobile + desktop)
+# 🔍 Search box
 search_text = st.text_input("🔍 Search Destination")
 
-# Filter destinations
+# Filter results
+filtered_destinations = [
+    d for d in st.session_state.destinations
+    if search_text.lower() in d.lower()
+] if search_text else []
+
+# Show suggestions (auto)
+selected = None
+
 if search_text:
-    filtered_destinations = [
-        d for d in st.session_state.destinations
-        if search_text.lower() in d.lower()
-    ]
-else:
-    filtered_destinations = st.session_state.destinations
+    if filtered_destinations:
+        st.write("### Suggestions")
+        for place in filtered_destinations:
+            if st.button(f"📍 {place}", key=place):
+                selected = place
+                st.session_state.selected_place = place
+    else:
+        st.warning("❌ No matching destinations found")
 
-
-# ✅ Selectbox (use filtered list)
-selected = st.selectbox(
-    "Select Destination",
-    filtered_destinations,
-    index=None,
-    placeholder="🔍 Select destination..."
-)
-
-# Optional: show message if no match
-if search_text and not filtered_destinations:
-    st.warning("❌ No matching destinations found")
-
+# Keep selected value
+if "selected_place" in st.session_state:
+    selected = st.session_state.selected_place
 
 # ✅ STOP if nothing selected
 if not selected:
