@@ -200,7 +200,7 @@ if search_clicked:
         st.sidebar.write(f"Showing {len(filtered_places)} places 👇")
         for place in filtered_places:
             st.sidebar.write(f"📍 {place}")
-        st.sidebar.caption("⬆️ Scroll to see more")
+        
     else:
         st.sidebar.warning("No destinations found")
 
