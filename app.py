@@ -219,9 +219,6 @@ if "destinations" not in st.session_state:
 # 🔍 Search box
 search_text = st.text_input("🔍 Search Destination")
 
-if st.button("📋 Show All Destinations"):
-    st.session_state.show_all = True
-
 # Case-insensitive matching (anywhere in name)
 if search_text:
     filtered_destinations = [
