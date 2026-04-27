@@ -97,6 +97,26 @@ conn = sqlite3.connect("tripplanner.db")
 
 cursor = conn.cursor()
 
+st.markdown("""
+<style>
+/* Force sidebar to scroll */
+section[data-testid="stSidebar"] {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Smooth scrollbar (optional) */
+section[data-testid="stSidebar"]::-webkit-scrollbar {
+    width: 6px;
+}
+
+section[data-testid="stSidebar"]::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 st.markdown("""
 <style>
@@ -174,8 +194,10 @@ if search_clicked:
     st.sidebar.subheader("🌍 Recommended")
 
     if filtered_places:
+        st.sidebar.write(f"Showing {len(filtered_places)} places 👇")
         for place in filtered_places:
             st.sidebar.write(f"📍 {place}")
+        st.sidebar.caption("⬆️ Scroll to see more")
     else:
         st.sidebar.warning("No destinations found")
 
