@@ -100,27 +100,6 @@ cursor = conn.cursor()
 
 st.markdown("""
 <style>
-section[data-testid="stSidebar"] {
-    height: 100vh;
-    overflow-y: auto;
-}
-
-/* Optional: smooth scroll look */
-section[data-testid="stSidebar"]::-webkit-scrollbar {
-    width: 6px;
-}
-
-section[data-testid="stSidebar"]::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-</style>
-""", unsafe_allow_html=True)
-
-
-
-st.markdown("""
-<style>
 
 /* Sidebar background */
 section[data-testid="stSidebar"] {
