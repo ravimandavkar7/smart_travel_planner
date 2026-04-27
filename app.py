@@ -208,11 +208,9 @@ if search_clicked:
 st.title("Smart Travel Planner ✈️")
 
 if "shown_hint" not in st.session_state:
-    st.markdown("""
-    📱 **Mobile User Use top-left >> menu for Find Best Destination**
-    """)
-    
-# Dropdown from DB
+    st.markdown("📱 **Mobile User Use top-left >> menu for Find Best Destination**")
+
+# Load destinations once
 if "destinations" not in st.session_state:
     cursor.execute("SELECT Destination FROM Destination")
     st.session_state.destinations = sorted([row[0] for row in cursor.fetchall()])
@@ -225,6 +223,12 @@ selected = st.selectbox(
     key="destination_select"
 )
 
+# ✅ STOP if nothing selected
+if not selected:
+    st.info("👆 Please select a destination to continue")
+    st.stop()
+
+# ✅ Now safe to query
 cursor.execute("""
 SELECT DestinationId, Min_day, image_path
 FROM Destination
@@ -233,10 +237,14 @@ WHERE Destination=?
 
 data = cursor.fetchone()
 
-destination_id = data[0]
-min_day = data[1]
-image_path = data[2]
+# ✅ Extra safety
+if data is None:
+    st.error("❌ Destination not found in database")
+    st.stop()
 
+destination_id, min_day, image_path = data
+
+# Budget fetch
 cursor.execute("""
 SELECT Budget 
 FROM AvgBudget
@@ -246,7 +254,6 @@ ORDER BY Budget
 
 budget_rows = cursor.fetchall()
 
-# Convert to list
 budget_options = [row[0] for row in budget_rows]
 
 
