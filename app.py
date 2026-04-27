@@ -215,16 +215,30 @@ if "destinations" not in st.session_state:
     cursor.execute("SELECT Destination FROM Destination")
     st.session_state.destinations = sorted([row[0] for row in cursor.fetchall()])
 
+
+# 🔍 ✅ ADD THIS (Search box for mobile + desktop)
+search_text = st.text_input("🔍 Search Destination")
+
+# Filter destinations
+if search_text:
+    filtered_destinations = [
+        d for d in st.session_state.destinations
+        if search_text.lower() in d.lower()
+    ]
+else:
+    filtered_destinations = st.session_state.destinations
+
+
+# ✅ Selectbox (use filtered list)
 selected = st.selectbox(
     "Select Destination",
-    st.session_state.destinations,
-    index=None,
-    placeholder="🔍 Search destination...",
+    filtered_destinations,
+    index=0 if filtered_destinations else None
 )
 
-# Reset dropdown after selection (IMPORTANT)
-if selected:
-    st.session_state.destination_select = selected
+# Optional: show message if no match
+if search_text and not filtered_destinations:
+    st.warning("❌ No matching destinations found")
 
 
 # ✅ STOP if nothing selected
@@ -232,7 +246,8 @@ if not selected:
     st.info("👆 Please select a destination to continue")
     st.stop()
 
-# ✅ Now safe to query
+
+# ✅ DB Query
 cursor.execute("""
 SELECT DestinationId, Min_day, image_path
 FROM Destination
@@ -241,12 +256,12 @@ WHERE Destination=?
 
 data = cursor.fetchone()
 
-# ✅ Extra safety
 if data is None:
     st.error("❌ Destination not found in database")
     st.stop()
 
 destination_id, min_day, image_path = data
+
 
 # Budget fetch
 cursor.execute("""
@@ -257,7 +272,6 @@ ORDER BY Budget
 """, (destination_id,))
 
 budget_rows = cursor.fetchall()
-
 budget_options = [row[0] for row in budget_rows]
 
 
