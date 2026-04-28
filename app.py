@@ -181,8 +181,6 @@ per_person_budget = user_budget / persons
 
 st.sidebar.info(f"💰 Per Person Budget: ₹{int(per_person_budget)}")
 
-st.write("DEBUG: Per person budget:", per_person_budget)
-
 search_clicked = st.sidebar.button("🔎 Search")
 
 if search_clicked:
@@ -196,9 +194,6 @@ if search_clicked:
 
     rows = cursor.fetchall()
     
-    st.write("DEBUG: Raw DB rows")
-    st.write(rows)
-
     filtered_places = []
 
     for row in rows:
@@ -206,11 +201,6 @@ if search_clicked:
         season = row[1]
         avg_budget = row[2]
         st.write(f"Checking: {name}, Season: {season}")
-
-        if month_in_season(month, season):
-            st.write(f"✅ Season matched: {name}")
-        else:
-            st.write(f"❌ Season NOT matched: {name}")
 
         if month_in_season(month, season) and avg_budget <= per_person_budget:
             filtered_places.append(name)
