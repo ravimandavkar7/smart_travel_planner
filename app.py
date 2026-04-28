@@ -200,7 +200,7 @@ if search_clicked:
         name = row[0]
         season = row[1]
         avg_budget = row[2]
-        st.write(f"Checking: {name}, Season: {season}")
+        
 
         if month_in_season(month, season) and avg_budget <= per_person_budget:
             filtered_places.append(name)
