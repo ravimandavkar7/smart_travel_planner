@@ -193,6 +193,9 @@ if search_clicked:
     """, (per_person_budget,))
 
     rows = cursor.fetchall()
+    
+    st.write("DEBUG: Raw DB rows")
+    st.write(rows)
 
     filtered_places = []
 
