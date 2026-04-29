@@ -488,8 +488,6 @@ if st.button("Generate Plan"):
 
     places = cursor.fetchall()
     
-    st.write(places)
-    
     for place in places:
         st.markdown(f"""
     <div style="
