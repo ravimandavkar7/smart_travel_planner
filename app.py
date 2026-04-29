@@ -487,6 +487,8 @@ if st.button("Generate Plan"):
     """, (destination_id,))
 
     places = cursor.fetchall()
+    
+    st.write(places)
 
     for place in places:
         st.write(f"{place[0]} ({place[1]}) Place Rating ⭐{place[2]}: {place[3]}")
