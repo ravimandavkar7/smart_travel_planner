@@ -488,10 +488,19 @@ if st.button("Generate Plan"):
 
     places = cursor.fetchall()
     
-    st.write(places)
-
     for place in places:
-        st.write(f"{place[0]} ({place[1]}) Place Rating ⭐{place[2]}: {place[3]}")
+        st.markdown(f"""
+    <div style="
+        background-color: rgba(255,255,255,0.08);
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    ">
+    <b>{place[0]}</b> ({place[1]}) <br>
+    ⭐ {place[2]} <br><br>
+    {place[3]}
+    </div>
+    """, unsafe_allow_html=True)
 
 
     st.subheader("🏨 Recommended Hotels")
