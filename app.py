@@ -38,7 +38,7 @@ def month_in_season(user_month, season_range):
 if "show_ai_confirm" not in st.session_state:
     st.session_state.show_ai_confirm = False
 
-if "use_ai" not in st.session_state:
+if "use_ai" not in st.ses														sion_state:
     st.session_state.use_ai = False
 
 if "SUPABASE_URL" in st.secrets and "SUPABASE_KEY" in st.secrets:
@@ -487,6 +487,8 @@ if st.button("Generate Plan"):
     """, (destination_id,))
 
     places = cursor.fetchall()
+    
+    st.write(places)
     
     for place in places:
         st.markdown(f"""
