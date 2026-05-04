@@ -551,9 +551,9 @@ if st.button("Generate Plan"):
     )
 
     st.info(f"""
-    💡 Based on your total budget of ₹{budget}, we will:
+    💡 Based on your budget, we will:
      
-    🏨 **Recommend best hotels within your budget ({stay_budget})**\n 
+    🏨 **Recommend best hotels within your budget**\n 
     📞 **Share verified hotel contact details**\n 
     🚆 **Plan transport (bus/train/flight)**\n  
     💰 **Optimize your complete trip cost for maximum savings**\n  
